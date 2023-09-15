@@ -3,13 +3,15 @@ const Tasks = require('./../model/feedbackModel');
 exports.getTasks = async (req, res) => {
   try {
     let tasks;
-    if (req.query.userName) {
-      tasks = Tasks.find({ userName: req.query.userName });
+    if (req.query.email) {
+      const email = req.query.email;
+      tasks = Tasks.find({ email });
     } else {
       tasks = Tasks.find();
     }
 
     const data = await tasks;
+    console.log(data);
 
     res.status(200).json({
       status: 'success',
@@ -45,12 +47,31 @@ exports.addTask = async (req, res) => {
   }
 };
 
+exports.updateTask = async (req, res) => {
+  try {
+    const task = await Tasks.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      task,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: 'fail',
+      message: 'Could not update Task',
+    });
+  }
+};
+
 exports.deleteTask = async (req, res) => {
   try {
     await Tasks.findByIdAndDelete(req.params.id);
-    res.status(200).json({
+    res.status(204).json({
       status: 'success',
-      message: 'Task Deleted',
     });
   } catch (error) {
     res.status(404).json({

@@ -7,6 +7,8 @@ Router.route('/')
   .get(feedbackController.getTasks)
   .post(feedbackController.addTask);
 
-Router.route('/:id').delete(feedbackController.deleteTask);
+Router.route('/:id')
+  .delete(feedbackController.deleteTask)
+  .patch(feedbackController.updateTask);
 
 module.exports = Router;
