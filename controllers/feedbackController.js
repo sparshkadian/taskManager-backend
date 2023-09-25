@@ -81,3 +81,11 @@ exports.deleteTask = async (req, res) => {
     console.log(error);
   }
 };
+
+// Server Ping to avoid spin down
+setInterval(async () => {
+  const response = await axios.get(
+    `https://taskmanager-api-52du.onrender.com/api/tasks?email=${process.env.EMAIL}`
+  );
+  const data = await response.data;
+}, 840000);
